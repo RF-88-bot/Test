@@ -9,13 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('author');
-            $table->string('category');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->year('year');
             $table->string('publisher');
             $table->string('image')->nullable();

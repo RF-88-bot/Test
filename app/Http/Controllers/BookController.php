@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Storage;
 
@@ -10,18 +11,12 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::latest()->filter(request(['search']))->paginate(2);
-        $category = request('category');
+        $books = Book::with('category')
+            ->latest()
+            ->filter(request(['search']))
+            ->paginate(5);
 
-        if ($category) {
-            $books = $books->filter(function ($book) use ($category) {
-                return $book['category'] === $category;
-            });
-        }
-
-        $categories = $books->pluck('category')->unique();
-
-        return view('books.buku', compact('books', 'categories'));
+        return view('books.buku', compact('books'));
     }
 
     public function show($id)
@@ -33,7 +28,8 @@ class BookController extends Controller
     // Menampilkan form tambah buku
     public function create()
     {
-        return view('books.tambahBuku');
+        $categories = Category::all();
+        return view('books.tambahBuku', compact('categories'));
     }
 
     // Proses simpan buku baru
@@ -46,7 +42,7 @@ class BookController extends Controller
         $rules = [
             'title' => 'required',
             'author' => 'required',
-            'category' => 'required',
+            'category_id' => 'required',
             'year' => 'required|integer',
             'publisher' => 'required',
             'image' => 'image|file|max:1024'
@@ -56,7 +52,7 @@ class BookController extends Controller
         $messages = [
             'title.required' => 'Judul buku wajib diisi.',
             'author.required' => 'Nama penulis tidak boleh kosong.',
-            'category.required' => 'Kategori buku harus diisi.',
+            'category_id.required' => 'Kategori buku harus diisi.',
             'year.required' => 'Tahun terbit harus diisi.',
             'year.integer' => 'Tahun terbit harus berupa angka.',
             'publisher.required' => 'Nama penerbit tidak boleh kosong.',
@@ -79,7 +75,8 @@ class BookController extends Controller
     }
     public function edit(Book $book)
     {
-        return view('books.edit_buku', compact('book'));
+        $categories = Category::all();
+        return view('books.edit_buku', compact('book', 'categories'));
     }
     public function update(Request $request, Book $book)
     {
@@ -87,7 +84,7 @@ class BookController extends Controller
         $rules = [
             'title' => 'required',
             'author' => 'required',
-            'category' => 'required',
+            'category_id' => 'required',
             'year' => 'required|integer',
             'publisher' => 'required',
             'image' => 'image|file|max:1024'
@@ -96,7 +93,7 @@ class BookController extends Controller
         $messages = [
             'title.required' => 'Judul buku wajib diisi.',
             'author.required' => 'Nama penulis tidak boleh kosong.',
-            'category.required' => 'Kategori buku harus diisi.',
+            'category.required_id' => 'Kategori buku harus diisi.',
             'year.required' => 'Tahun terbit harus diisi.',
             'year.integer' => 'Tahun terbit harus berupa angka.',
             'publisher.required' => 'Nama penerbit tidak boleh kosong.',

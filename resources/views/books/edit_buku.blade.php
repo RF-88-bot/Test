@@ -28,13 +28,21 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Kategori</label>
-                <input type="text" name="category" class="form-control @error('category') is-invalid @enderror"
-                    value="{{ old('category', $book->category) }}">
-                @error('category')
+                <label for="category_id" class="form-label">Kategori</label>
+                <select name="category_id" class="form-control @error('category_id') is-invalid @enderror">
+                    <option value="">-- Pilih Kategori --</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}"
+                            {{ old('category_id', $book->category_id) == $category->id ? 'selected' : '' }}>
+                            {{ $category->category }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+
 
             <div class="mb-3">
                 <label class="form-label">Tahun Terbit</label>

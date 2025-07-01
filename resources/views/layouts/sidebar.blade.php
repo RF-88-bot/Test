@@ -4,7 +4,7 @@
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a href="./index.html" class="text-nowrap logo-img">
-                <img src="../assets/images/logos/dark-logo.svg" width="180" alt="" />
+                <img src="{{ asset('/assets/images/logos/dark-logo.svg') }}" width="180" alt="" />
             </a>
             <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                 <i class="ti ti-x fs-8"></i>
@@ -18,8 +18,8 @@
                     <span class="hide-menu">Home</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link {{ Request::is('buku*') ? 'active' : '' }}" href="/buku"
-                        aria-expanded="false">
+                    <a class="sidebar-link {{ Request::is('admin/buku*') ? 'active' : '' }}"
+                        href="{{ route('admin.books') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-book"></i>
                         </span>
@@ -27,6 +27,15 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
+                    <a class="sidebar-link {{ Request::is('*category*') ? 'active' : '' }}"
+                        href="{{ route('admin.categories') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-category"></i>
+                        </span>
+                        <span class="hide-menu">Category</span>
+                    </a>
+                </li>
+                {{-- <li class="sidebar-item">
                     <a class="sidebar-link {{ Request::is('student*') ? 'active' : '' }}" href="/student"
                         aria-expanded="false">
                         <span>
@@ -34,7 +43,7 @@
                         </span>
                         <span class="hide-menu">Students</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

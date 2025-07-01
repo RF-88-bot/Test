@@ -6,29 +6,6 @@
     <div class="container">
         <h1 class="mb-4 text-primary"><i class="fas fa-book me-2"></i>Daftar Buku</h1>
 
-        <!-- Filter Kategori -->
-        <div class="mb-4 card shadow-sm">
-            <div class="card-body">
-                <form action="{{ route('admin.books') }}" method="GET">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-auto">
-                            <label class="col-form-label"><i class="ti ti-filter"></i>Filter Kategori:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <select name="category" class="form-select" onchange="this.form.submit()">
-                                <option value="">Semua Kategori</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category }}"
-                                        {{ request('category') == $category ? 'selected' : '' }}>
-                                        {{ $category }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="fas fa-check-circle me-2"></i>
@@ -88,7 +65,7 @@
                                     {{ $book->author }}
                                 </td>
                                 <td>
-                                    {{ $book->category }}
+                                    {{ $book->category->category }}
                                 </td>
                                 <td>
                                     {{ $book->created_at->diffForHumans() }}

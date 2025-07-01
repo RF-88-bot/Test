@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
-    protected $fillable = ['title', 'author', 'category', 'year', 'publisher', 'image'];
+    // protected $fillable = ['title', 'author', 'category', 'year', 'publisher', 'image'];
 
-    // protected $guarded = ['id'];
+    protected $guarded = ['id'];
 
     public function scopeFilter($query, array $filters)
     {
@@ -20,5 +20,10 @@ class Book extends Model
                 ->orWhere('author', 'like', '%' . $search . '%')
                 ->orWhere('category', 'like', '%' . $search . '%');
         });
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }
