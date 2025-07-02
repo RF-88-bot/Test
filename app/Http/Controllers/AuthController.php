@@ -61,7 +61,7 @@ class AuthController extends Controller
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        return redirect('/')->with('success', 'Pendaftaran berhasil!');
+        return redirect()->route('login')->with('success', 'Pendaftaran berhasil!');
     }
     public function login(Request $request)
     {
@@ -84,7 +84,7 @@ class AuthController extends Controller
             if ($user->role === 'admin') {
                 return redirect()->route('admin.books');
             } elseif ($user->role === 'user') {
-                return redirect()->intended('/books');
+                return redirect()->route('user.favorite');
             }
         }
         // Jika login gagal

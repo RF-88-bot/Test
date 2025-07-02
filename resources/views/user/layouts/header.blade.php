@@ -25,22 +25,40 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 gap-1 gap-md-5 pe-3">
                             <li class="nav-item ">
-                                <a class="nav-link active" href="#">Home</a>
+                                <a class="nav-link {{ Request::is('/') ? 'active' : '' }}"
+                                    href="{{ route('home') }}">Home</a>
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link" href="#">Shop</a>
+                                <a class="nav-link {{ Request::is('galery*') ? 'active' : '' }}"
+                                    href="{{ route('galery') }}">Galery</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link">Blog</a>
+                                @guest
+                                    <a class="nav-link" href="#"
+                                        onclick="event.preventDefault(); showToast('😅 Waduh, nggak bisa lihat favorite kalau belum login.')">
+                                        Favorite
+                                    </a>
+                                @endguest
+                                @auth
+                                    <a class="nav-link {{ Request::is('user/favorite*') ? 'active' : '' }}"
+                                        href="{{ route('user.favorite') }}">Favorite</a>
+                                @endauth
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link">Pages</a>
+                                <a class="nav-link {{ Request::is('book-with-relation') ? 'active' : '' }}"
+                                    href="{{ route('book.relation') }}">Normal</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Blog</a>
+                                <a class="nav-link {{ Request::is('book-with-N+1-problem') ? 'active' : '' }}"
+                                    href="{{ route('book.problem') }}">N + 1</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Contact</a>
+                                @guest
+                                    <a class="nav-link" href="{{ route('login') }}">LOGIN</a>
+                                @endguest
+                                @auth
+                                    <a class="nav-link" href="{{ route('logout') }}">LOGOUT</a>
+                                @endauth
                             </li>
                         </ul>
                     </div>
@@ -51,3 +69,17 @@
 
     </div>
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function showToast(message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    }
+</script>

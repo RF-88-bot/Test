@@ -4,12 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\BookPublicController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\BookPublicController;
 
 
-Route::get('/', [AuthController::class, 'index'])->name('login');
+Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::get('/register', [AuthController::class, 'register'])->name('auth.register.form');
 Route::post('/register', [AuthController::class, 'RegisterPost'])->name('auth.register');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
@@ -39,7 +40,40 @@ Route::prefix('admin')->middleware(['auth', RoleMiddleware::class . ':admin'])->
 // User routes
 Route::prefix('user')->middleware(['auth', RoleMiddleware::class . ':user'])->name('user.')->group(function () {
     Route::view('/dashboard', 'user.test')->name('dashboard');
+    Route::post('/favorite/toggle', [FavoriteController::class, 'toggle'])->middleware('auth')->name('favorite.toggle');
+    Route::get('/favorite', [FavoriteController::class, 'index'])->middleware('auth')->name('favorite');
 });
+
+//route yang bisa di akses publik
+Route::get('/', [BookPublicController::class, 'index'])->name('home');
+Route::get('/galery', [BookPublicController::class, 'bookGaleryImages'])->name('galery');
+Route::get('/ajax/books', [BookPublicController::class, 'getBooks'])->name('books.ajax');
+
+//materi N+1
+Route::get('/book-with-relation', [BookPublicController::class, 'showBooksWithCategory'])->name('book.relation');
+Route::get('/book-with-N+1-problem', [BookPublicController::class, 'showBooksWithCategoryNPlusOne'])->name('book.problem'); //route untuk N+1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -50,5 +84,4 @@ Route::get('/student', [StudentController::class, 'index']);
 Route::get('/cobacoba', function () {
     return view('user.main');
 })->name('dashboard');
-Route::get('/cobalagi', [BookPublicController::class, 'index'])->name('home');
 Route::get('/student/{nim}', [StudentController::class, 'show']);
